@@ -1,4 +1,4 @@
-package net.johnflanigan.day1;
+package net.johnflanigan.adventofcode2018.day1;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
