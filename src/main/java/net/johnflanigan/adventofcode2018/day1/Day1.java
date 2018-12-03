@@ -8,9 +8,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class day1 {
+public class Day1 {
 
-    public static String day1() {
+    public void day1() {
 
         String file ="src/main/resources/day1_input.txt";
         List<Integer> changes = new LinkedList<>();
@@ -36,7 +36,8 @@ public class day1 {
             for (Integer change : changes) {
                 frequency += change;
                 if (frequencies.contains(frequency)) {
-                    return String.valueOf(frequency);
+                    System.out.println(String.valueOf(frequency));
+                    return;
                 } else {
                     frequencies.add(frequency);
                 }

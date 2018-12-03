@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-public class day2 {
+public class Day2 {
 
-    public static String day2() {
+    public void day2() {
 
         String file ="src/main/resources/day2_input.txt";
         List<String> ids = new LinkedList<>();
@@ -88,8 +88,7 @@ public class day2 {
             }
         }
 
-        //return "";
-        return String.valueOf(twoCount * threeCount);
+        System.out.println(String.valueOf(twoCount * threeCount));
 
     }
 }
