@@ -12,8 +12,8 @@ public class Day3 {
 
     class Claim {
         int id;
-        int x;
-        int y;
+        int col;
+        int row;
         int width;
         int height;
 
@@ -21,10 +21,10 @@ public class Day3 {
 
         }
 
-        private Claim(int id, int x, int y, int width, int height) {
+        private Claim(int id, int col, int row, int width, int height) {
             this.id = id;
-            this.x = x;
-            this.y = y;
+            this.col = col;
+            this.row = row;
             this.width = width;
             this.height = height;
         }
@@ -33,8 +33,8 @@ public class Day3 {
         public String toString() {
             return "Claim{" +
                     "id=" + id +
-                    ", x=" + x +
-                    ", y=" + y +
+                    ", col=" + col +
+                    ", row=" + row +
                     ", width=" + width +
                     ", height=" + height +
                     '}';
@@ -80,54 +80,47 @@ public class Day3 {
             }
         }
 
-        int count = 0;
-        for (int i = 0; i < 1000; i++) {
-            for (int j = 0; j < 1000; j++) {
-                if (fabric[i][j] > 1) {
-                    count++;
-                }
-            }
-        }
-
-        System.out.println(count);
-
     }
 
-    // TODO fix index naming, function is confusing
     private boolean overlap(int[][] fabric, Claim claim) {
+        int currentRow = claim.row;
 
-        int currentY = claim.y;
-
+        // for every row of the claim
         for (int i = 0; i < claim.height; i++) {
-            int currentX = claim.x;
+            // get the left-most column of claim
+            int currentCol = claim.col;
 
+            // for every column of the claim, check if there is overlap
             for (int j = 0; j < claim.width; j++) {
-                if (fabric[currentX][currentY] > 1) {
+                if (fabric[currentCol][currentRow] > 1) {
                     return true;
                 }
-                currentX++;
+                currentCol++;
             }
-            currentY++;
+            currentRow++;
         }
 
         return false;
     }
 
-    // TODO fix index naming, function is confusing
     private void updateFabric(int[][] fabric, Claim claim) {
-        int currentY = claim.y;
+        int currentRow = claim.row;
 
+        // for every row of the claim
         for (int i = 0; i < claim.height; i++) {
-            int currentX = claim.x;
+            // get the left-most column of claim
+            int currentCol = claim.col;
 
+            // for every column of the claim, increment the count of overlaps
             for (int j = 0; j < claim.width; j++) {
-                fabric[currentX][currentY]++;
-                currentX++;
+                fabric[currentCol][currentRow]++;
+                currentCol++;
             }
-            currentY++;
+            currentRow++;
         }
     }
 
+    // input format is: #(id) @ (col),(row): (width)x(height)
     public Claim convertInputToClaim(String input) {
         String regex = "#(\\d+) @ (\\d+),(\\d+): (\\d+)x(\\d+)";
         Pattern pattern = Pattern.compile(regex);
@@ -135,8 +128,8 @@ public class Day3 {
         Claim claim = new Claim();
         if (matcher.find()) {
             claim.id = Integer.parseInt(matcher.group(1));
-            claim.x = Integer.parseInt(matcher.group(2));
-            claim.y = Integer.parseInt(matcher.group(3));
+            claim.col = Integer.parseInt(matcher.group(2));
+            claim.row = Integer.parseInt(matcher.group(3));
             claim.width = Integer.parseInt(matcher.group(4));
             claim.height = Integer.parseInt(matcher.group(5));
         }
