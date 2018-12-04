@@ -1,5 +1,7 @@
 package net.johnflanigan.adventofcode2018.day1;
 
+import net.johnflanigan.adventofcode2018.Day;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,25 +10,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-public class Day1 {
+public class Day1 extends Day {
 
-    public void day1() {
+    public void solve() {
 
         String file ="src/main/resources/day1_input.txt";
+        List<String> inputs = readFile(file);
+
         List<Integer> changes = new LinkedList<>();
-
-        /* save the input to a list */
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            String currentLine = reader.readLine();
-            while (currentLine != null) {
-                int change = Integer.parseInt(currentLine);
-                changes.add(change);
-                currentLine = reader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        for (String input : inputs) {
+            changes.add(Integer.parseInt(input));
         }
 
         /* repeat until a duplicate frequency appears */

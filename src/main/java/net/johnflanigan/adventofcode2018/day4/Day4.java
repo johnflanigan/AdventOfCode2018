@@ -1,35 +1,19 @@
 package net.johnflanigan.adventofcode2018.day4;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import net.johnflanigan.adventofcode2018.Day;
+
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Day4 {
+public class Day4 extends Day {
 
     public void solve() {
 
         String file = "src/main/resources/day4_input.txt";
-        List<String> inputs = new LinkedList<>();
-
-        /* save the input to a list */
-        // TODO these lines could probably be done in one step
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            String currentLine = reader.readLine();
-            while (currentLine != null) {
-                inputs.add(currentLine);
-                currentLine = reader.readLine();
-            }
-        } catch (
-                IOException e) {
-            e.printStackTrace();
-        }
+        List<String> inputs = readFile(file);
 
         List<LogEntry> entries = new ArrayList<>();
         for (String input : inputs) {
@@ -122,46 +106,37 @@ public class Day4 {
     }
 
     private LogEntry convertInputToLogEntry(String input) {
-        // [yyyy-MM-dd hh:mm] Guard #(id) begins shift
-        String startShiftRegex = "\\[(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2})] Guard #(\\d+) begins shift";
-        Pattern startShiftPattern = Pattern.compile(startShiftRegex);
-        Matcher startShiftMatcher = startShiftPattern.matcher(input);
-        if (startShiftMatcher.find()) {
-            int year = Integer.parseInt(startShiftMatcher.group(1));
-            int month = Integer.parseInt(startShiftMatcher.group(2));
-            int day = Integer.parseInt(startShiftMatcher.group(3));
-            int hour = Integer.parseInt(startShiftMatcher.group(4));
-            int minute = Integer.parseInt(startShiftMatcher.group(5));
-            LocalDateTime dateTime = LocalDateTime.of(year, Month.of(month), day, hour, minute);
-            return new ShiftStart(dateTime, Integer.parseInt(startShiftMatcher.group(6)));
+
+        String regex = "";
+
+        if (input.contains("begins")) {
+            regex = "\\[(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2})] Guard #(\\d+) begins shift";
+        } else if (input.contains("falls")) {
+            regex = "\\[(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2})] falls asleep";
+        } else if (input.contains("wakes")) {
+            regex = "\\[(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2})] wakes up";
         }
 
-        // [yyyy-MM-dd hh:mm] falls asleep
-        String fallAsleepRegex = "\\[(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2})] falls asleep";
-        Pattern fallAsleepPattern = Pattern.compile(fallAsleepRegex);
-        Matcher fallAsleepMatcher = fallAsleepPattern.matcher(input);
-        if (fallAsleepMatcher.find()) {
-            int year = Integer.parseInt(fallAsleepMatcher.group(1));
-            int month = Integer.parseInt(fallAsleepMatcher.group(2));
-            int day = Integer.parseInt(fallAsleepMatcher.group(3));
-            int hour = Integer.parseInt(fallAsleepMatcher.group(4));
-            int minute = Integer.parseInt(fallAsleepMatcher.group(5));
-            LocalDateTime dateTime = LocalDateTime.of(year, Month.of(month), day, hour, minute);
-            return new FallAsleep(dateTime);
-        }
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
 
-        // [yyyy-MM-dd hh:mm] wakes up
-        String wakeUpRegex = "\\[(\\d{4})-(\\d{2})-(\\d{2}) (\\d{2}):(\\d{2})] wakes up";
-        Pattern wakeUpPattern = Pattern.compile(wakeUpRegex);
-        Matcher wakeUpMatcher = wakeUpPattern.matcher(input);
-        if (wakeUpMatcher.find()) {
-            int year = Integer.parseInt(wakeUpMatcher.group(1));
-            int month = Integer.parseInt(wakeUpMatcher.group(2));
-            int day = Integer.parseInt(wakeUpMatcher.group(3));
-            int hour = Integer.parseInt(wakeUpMatcher.group(4));
-            int minute = Integer.parseInt(wakeUpMatcher.group(5));
+        if (matcher.find()) {
+
+            int year = Integer.parseInt(matcher.group(1));
+            int month = Integer.parseInt(matcher.group(2));
+            int day = Integer.parseInt(matcher.group(3));
+            int hour = Integer.parseInt(matcher.group(4));
+            int minute = Integer.parseInt(matcher.group(5));
             LocalDateTime dateTime = LocalDateTime.of(year, Month.of(month), day, hour, minute);
-            return new WakeUp(dateTime);
+
+            if (input.contains("begins")) {
+                return new ShiftStart(dateTime, Integer.parseInt(matcher.group(6)));
+            } else if (input.contains("falls")) {
+                return new FallAsleep(dateTime);
+            } else if (input.contains("wakes")) {
+                return new WakeUp(dateTime);
+            }
+
         }
 
         return null;

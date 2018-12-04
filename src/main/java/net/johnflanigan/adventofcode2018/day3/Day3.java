@@ -1,67 +1,20 @@
 package net.johnflanigan.adventofcode2018.day3;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import net.johnflanigan.adventofcode2018.Day;
+
 import java.util.LinkedList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Day3 {
+public class Day3 extends Day {
 
-    class Claim {
-        int id;
-        int col;
-        int row;
-        int width;
-        int height;
-
-        private Claim() {
-
-        }
-
-        private Claim(int id, int col, int row, int width, int height) {
-            this.id = id;
-            this.col = col;
-            this.row = row;
-            this.width = width;
-            this.height = height;
-        }
-
-        @Override
-        public String toString() {
-            return "Claim{" +
-                    "id=" + id +
-                    ", col=" + col +
-                    ", row=" + row +
-                    ", width=" + width +
-                    ", height=" + height +
-                    '}';
-        }
-    }
-
-    public void day3() {
+    public void solve() {
 
         int[][] fabric = new int[1000][1000];
 
         String file = "src/main/resources/day3_input.txt";
-        List<String> inputs = new LinkedList<>();
-
-        /* save the input to a list */
-        // TODO these lines could probably be done in one step
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            String currentLine = reader.readLine();
-            while (currentLine != null) {
-                inputs.add(currentLine);
-                currentLine = reader.readLine();
-            }
-        } catch (
-                IOException e) {
-            e.printStackTrace();
-        }
+        List<String> inputs = readFile(file);
 
         List<Claim> claims = new LinkedList<>();
         for (String input : inputs) {

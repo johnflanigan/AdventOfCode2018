@@ -1,30 +1,16 @@
 package net.johnflanigan.adventofcode2018.day2;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import net.johnflanigan.adventofcode2018.Day;
+
 import java.util.LinkedList;
 import java.util.List;
 
-public class Day2 {
+public class Day2 extends Day {
 
-    public void day2() {
+    public void solve() {
 
         String file ="src/main/resources/day2_input.txt";
-        List<String> ids = new LinkedList<>();
-
-        /* save the input to a list */
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-
-            String currentLine = reader.readLine();
-            while (currentLine != null) {
-                ids.add(currentLine);
-                currentLine = reader.readLine();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        List<String> ids = readFile(file);
 
         List<char[]> candidates = new LinkedList<>();
         int twoCount = 0;
