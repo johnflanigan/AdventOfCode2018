@@ -3,10 +3,11 @@ package net.johnflanigan.adventofcode2018;
 import net.johnflanigan.adventofcode2018.day1.Day1;
 import net.johnflanigan.adventofcode2018.day2.Day2;
 import net.johnflanigan.adventofcode2018.day3.Day3;
+import net.johnflanigan.adventofcode2018.day4.Day4;
 
 public class Main {
 
-    private static final int DAY = 3;
+    private static final int DAY = 4;
 
     public static void main(String[] args) {
 
@@ -20,6 +21,9 @@ public class Main {
             case 3:
                 Day3 day3 = new Day3();
                 day3.day3();
+            case 4:
+                Day4 day4 = new Day4();
+                day4.solve();
         }
 
     }
