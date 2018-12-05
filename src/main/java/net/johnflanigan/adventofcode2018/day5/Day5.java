@@ -4,14 +4,13 @@ import net.johnflanigan.adventofcode2018.Day;
 
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Day5 extends Day {
 
     @Override
     public void solve() {
-        
+
         // Data is assumed to be only one line
         String polymer = readFile("src/main/resources/day5_input.txt").get(0);
 
@@ -57,7 +56,6 @@ public class Day5 extends Day {
 
         return stack.size();
     }
-
 
     private Character reverseCase(Character character) {
         if (Character.isUpperCase(character)) {
