@@ -3,6 +3,7 @@ package net.johnflanigan.adventofcode2018.day5;
 import net.johnflanigan.adventofcode2018.Day;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Day5 extends Day {
 
@@ -39,21 +40,16 @@ public class Day5 extends Day {
             units.add(polymer.charAt(i));
         }
 
-        int index = 1;
-        while (index < units.size()) {
-            if (index > 0 && units.get(index) == reverseCase(units.get(index - 1))) {
-                units.remove(index - 1);
-                units.remove(index - 1);
-                index--;
-            } else if (index < units.size() - 1 && units.get(index) == reverseCase(units.get(index + 1))) {
-                units.remove(index);
-                units.remove(index);
+        Deque<Character> stack = new LinkedList<>();
+        for (Character unit : units) {
+            if (reverseCase(unit).equals(stack.peek())) {
+                stack.pop();
             } else {
-                index++;
+                stack.push(unit);
             }
         }
 
-        return units.size();
+        return stack.size();
     }
 
     private Character reverseCase(Character character) {
