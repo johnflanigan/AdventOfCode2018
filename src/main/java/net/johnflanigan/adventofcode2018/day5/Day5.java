@@ -3,17 +3,26 @@ package net.johnflanigan.adventofcode2018.day5;
 import net.johnflanigan.adventofcode2018.Day;
 
 import java.util.*;
+import java.util.function.Supplier;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 public class Day5 extends Day {
 
     @Override
     public void solve() {
-
+        
         // Data is assumed to be only one line
         String polymer = readFile("src/main/resources/day5_input.txt").get(0);
 
-        System.out.println("Part 1 solution: " + getReactedPolymerLength(polymer));
+        // Convert string to stream
+        List<Character> units = new LinkedList<>();
+        for (int i = 0; i < polymer.length(); i++) {
+            units.add(polymer.charAt(i));
+        }
+        Supplier<Stream<Character>> streamSupplier = units::stream;
+
+        System.out.println("Part 1 solution: " + getReactedPolymerLengthStream(streamSupplier.get()));
 
         // Reset the list, tracking unique unit types
         Set<Character> unitTypes = new HashSet<>();
@@ -23,9 +32,10 @@ public class Day5 extends Day {
 
         int shortestLength = polymer.length();
         for (Character unitType : unitTypes) {
-            String regex = "(" + Character.toLowerCase(unitType) + "|" + Character.toUpperCase(unitType) + ")";
-            String updatedPolymer = polymer.replaceAll(regex, "");
-            int polymerLength = getReactedPolymerLength(updatedPolymer);
+            Stream<Character> polymerStream = streamSupplier.get();
+            Stream<Character> updatedPolymer = polymerStream.filter(character -> Character.toLowerCase(character) != unitType);
+
+            int polymerLength = getReactedPolymerLengthStream(updatedPolymer);
             if (shortestLength > polymerLength) {
                 shortestLength = polymerLength;
             }
@@ -34,23 +44,20 @@ public class Day5 extends Day {
         System.out.println("Part 2 solution: " + shortestLength);
     }
 
-    private int getReactedPolymerLength(String polymer) {
-        List<Character> units = new LinkedList<>();
-        for (int i = 0; i < polymer.length(); i++) {
-            units.add(polymer.charAt(i));
-        }
-
+    private int getReactedPolymerLengthStream(Stream<Character> polymer) {
         Deque<Character> stack = new LinkedList<>();
-        for (Character unit : units) {
-            if (reverseCase(unit).equals(stack.peek())) {
+
+        polymer.forEach((character -> {
+            if (reverseCase(character).equals(stack.peek())) {
                 stack.pop();
             } else {
-                stack.push(unit);
+                stack.push(character);
             }
-        }
+        }));
 
         return stack.size();
     }
+
 
     private Character reverseCase(Character character) {
         if (Character.isUpperCase(character)) {
