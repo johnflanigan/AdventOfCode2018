@@ -8,7 +8,7 @@ import net.johnflanigan.adventofcode2018.day5.Day5;
 
 public class Main {
 
-    private static final int DAY = 4;
+    private static final int DAY = 1;
 
     public static void main(String[] args) {
 
@@ -17,14 +17,19 @@ public class Main {
         switch(DAY) {
             case 1:
                 day = new Day1();
+                break;
             case 2:
                 day = new Day2();
+                break;
             case 3:
                 day = new Day3();
+                break;
             case 4:
                 day = new Day4();
+                break;
             case 5:
                 day = new Day5();
+                break;
         }
 
         if (day != null) {

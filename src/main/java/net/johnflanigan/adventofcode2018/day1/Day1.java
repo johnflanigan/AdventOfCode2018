@@ -22,14 +22,21 @@ public class Day1 extends Day {
             changes.add(Integer.parseInt(input));
         }
 
+        int frequency = 0;
+        for (Integer change : changes) {
+            frequency += change;
+        }
+
+        System.out.println("Part 1 solution: " + frequency);
+
         /* repeat until a duplicate frequency appears */
         Set<Integer> frequencies = new HashSet<>();
-        int frequency = 0;
+        frequency = 0;
         while (true) {
             for (Integer change : changes) {
                 frequency += change;
                 if (frequencies.contains(frequency)) {
-                    System.out.println(String.valueOf(frequency));
+                    System.out.println("Part 2 solution: " + frequency);
                     return;
                 } else {
                     frequencies.add(frequency);
