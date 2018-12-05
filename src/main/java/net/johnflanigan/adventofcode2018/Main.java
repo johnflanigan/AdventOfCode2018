@@ -4,6 +4,7 @@ import net.johnflanigan.adventofcode2018.day1.Day1;
 import net.johnflanigan.adventofcode2018.day2.Day2;
 import net.johnflanigan.adventofcode2018.day3.Day3;
 import net.johnflanigan.adventofcode2018.day4.Day4;
+import net.johnflanigan.adventofcode2018.day5.Day5;
 
 public class Main {
 
@@ -22,6 +23,8 @@ public class Main {
                 day = new Day3();
             case 4:
                 day = new Day4();
+            case 5:
+                day = new Day5();
         }
 
         if (day != null) {
