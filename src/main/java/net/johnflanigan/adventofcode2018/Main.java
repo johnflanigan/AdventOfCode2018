@@ -6,10 +6,11 @@ import net.johnflanigan.adventofcode2018.day3.Day3;
 import net.johnflanigan.adventofcode2018.day4.Day4;
 import net.johnflanigan.adventofcode2018.day5.Day5;
 import net.johnflanigan.adventofcode2018.day6.Day6;
+import net.johnflanigan.adventofcode2018.day7.Day7;
 
 public class Main {
 
-    private static final int DAY = 6;
+    private static final int DAY = 7;
 
     public static void main(String[] args) {
 
@@ -33,6 +34,9 @@ public class Main {
                 break;
             case 6:
                 day = new Day6();
+                break;
+            case 7:
+                day = new Day7();
                 break;
         }
 
