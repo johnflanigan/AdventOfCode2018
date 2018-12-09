@@ -8,9 +8,13 @@ import java.util.regex.Pattern;
 
 public class Day7 extends Day {
 
-    Map<String, Node> nodeMap = new HashMap<>();
-    SortedSet<Node> toProcess;
-    List<Node> sorted;
+    private static final int NUMBER_OF_WORKERS = 5;
+
+    private Map<String, Node> nodeMap = new HashMap<>();
+    private SortedSet<Node> readyToProcess;
+    private List<Node> sorted;
+    private List<Worker> workers;
+    private int clock = 0;
 
     @Override
     public void solve() {
@@ -22,38 +26,60 @@ public class Day7 extends Day {
             convertInput(input);
         }
 
-        toProcess = new TreeSet<>();
+        readyToProcess = new TreeSet<>();
         sorted = new LinkedList<>();
+        workers = new LinkedList<>();
 
         // Find starting nodes
         for (Map.Entry<String, Node> entry : nodeMap.entrySet()) {
-            if (entry.getValue().getPrev().size() == 0) {
-                toProcess.add(entry.getValue());
+            if (entry.getValue().getParents().size() == 0) {
+                readyToProcess.add(entry.getValue());
             }
         }
 
+        // Initialize workers
+        for (int i = 0; i < NUMBER_OF_WORKERS; i++) {
+            workers.add(new Worker());
+        }
 
-        while (!toProcess.isEmpty()) {
-            // Get next node that is ready to process
-            Node current = toProcess.first();
-            toProcess.remove(current);
+        while (!readyToProcess.isEmpty() || nodeMap.size() != sorted.size()) {
+            // Check if any workers have finished processing
+            for (Worker worker : workers) {
+                if (worker.isProcessingFinished(clock)) {
+                    // Get completed node and update worker
+                    Node completed = worker.getNodeProcessing();
+                    worker.setNodeProcessing(null);
 
-            // Add it to the end of the sorted list
-            sorted.add(current);
-
-            // Check to see if any of its child nodes are ready to process
-            for (Node child : current.getNext()) {
-                if (isNodeReadyToProcess(child)) {
-                    toProcess.add(child);
+                    sorted.add(completed);
+                    // Check to see if any of its child nodes are ready to process
+                    for (Node child : completed.getChildren()) {
+                        if (isNodeReadyToProcess(child)) {
+                            readyToProcess.add(child);
+                        }
+                    }
                 }
             }
+
+            // Check to see if any workers are ready to start processing
+            for (Worker worker : workers) {
+                if (worker.getNodeProcessing() == null && !readyToProcess.isEmpty()) {
+                    Node ready = readyToProcess.first();
+                    readyToProcess.remove(ready);
+                    worker.setNodeProcessing(ready);
+                    worker.setProcessingStartTime(clock);
+                }
+            }
+
+            clock++;
         }
 
         String order = "";
         for (Node node : sorted) {
             order = order.concat(node.getId());
         }
-        System.out.println(order);
+        System.out.println("Part 1 solution: " + order);
+
+        System.out.println("Part 2 solution: " + (clock - 1));
     }
 
     private boolean isNodeReadyToProcess(Node node) {
@@ -62,7 +88,7 @@ public class Day7 extends Day {
         if (!sorted.contains(node)) {
             // Check if all parents have been processed
             boolean areParentsProcessed = true;
-            for (Node parent : node.getPrev()) {
+            for (Node parent : node.getParents()) {
                 if (!sorted.contains(parent)) {
                     areParentsProcessed = false;
                 }
@@ -72,7 +98,6 @@ public class Day7 extends Day {
             return false;
         }
     }
-
 
     private void convertInput(String input) {
 
@@ -103,6 +128,5 @@ public class Day7 extends Day {
             endNode.addPrevNode(startNode);
         }
     }
-
 
 }
